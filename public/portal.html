@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Cliente</title>
+    <link id="dynamicFonts" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --cor-principal: #121418;
+        --cor-texto-principal: #121418;
+        --cor-texto-botao: #c8933b;
+        --cor-destaque: #b38b4d;
+        --cor-destaque-hover: #8c6b32;
+        --cor-texto-destaque: #c8933b;
+        --cor-fundo: #cfd4dd;
+        --cor-container: #e4e7ed;
+        --cor-rodape: #d8dce4;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--cor-fundo); 
+        min-height: 100vh;
+        margin: 0;
+        padding: 30px 12px 50px;
+        color: #1c1e21;
+        transition: background-color 0.25s ease;
+      }
+      .wrapper {
+        max-width: 850px;
+        margin: 0 auto;
+        background-color: var(--cor-container); 
+        border-radius: 12px;
+        border: 1px solid #b8bfca;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
+        overflow: hidden;
+      }
+
+      /* TELA DE CARREGAMENTO INICIAL */
+      #telaCarregando {
+        padding: 80px 30px;
+        text-align: center;
+      }
+      .spinner {
+        width: 46px;
+        height: 46px;
+        border: 4px solid rgba(179, 139, 77, 0.25);
+        border-top-color: var(--cor-destaque);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        margin: 0 auto 18px;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* CABEÇALHO DINÂMICO */
+      .header {
+        background: radial-gradient(circle at 50% 38%, #3c424d 0%, #1d2026 55%, #111317 100%);
+        padding: 40px 25px 35px;
+        text-align: center;
+        border-bottom: 3px solid var(--cor-destaque);
+      }
+      .logo-img {
+        max-width: 120px;
+        width: 100%;
+        height: auto;
+        display: inline-block;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+      }
+      .logo-text { font-family: 'Cinzel', serif; font-size: 26px; font-weight: 500; margin: 0; letter-spacing: 2px; }
+      .logo-subtext { font-size: 11px; margin: 8px 0 0; letter-spacing: 4px; text-transform: uppercase; }
+
+      /* TELA DE MANUTENÇÃO */
+      .maintenance-box {
+        display: none;
+        padding: 55px 30px;
+        text-align: center;
+      }
+      .maintenance-icon {
+        width: 74px;
+        height: 74px;
+        background-color: #faf5eb;
+        color: var(--cor-destaque);
+        border: 2px solid var(--cor-destaque);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+      .maintenance-box h2 {
+        font-family: 'Cinzel', Georgia, serif;
+        color: var(--cor-texto-principal);
+        font-size: 22px;
+        margin: 0 0 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .maintenance-box p {
+        max-width: 500px;
+        margin: 0 auto 24px;
+        font-size: 15px;
+        color: #49505b;
+        line-height: 1.65;
+      }
+      .btn-wa-manutencao {
+        display: inline-block;
+        background-color: var(--cor-principal);
+        color: var(--cor-texto-botao);
+        border: 1.5px solid var(--cor-destaque);
+        padding: 14px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        transition: all 0.25s ease;
+      }
+      .btn-wa-manutencao:hover {
+        background-color: var(--cor-destaque);
+        color: #ffffff;
+      }
+
+      .content-body { padding: 40px 30px; }
+
+      /* LOGIN */
+      #telaLogin { max-width: 400px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06); border-top: 3.5px solid var(--cor-destaque); }
+      #telaLogin h2 { font-family: 'Cinzel', serif; text-align: center; margin: 0 0 20px; color: var(--cor-texto-principal); }
+      .form-group { margin-bottom: 18px; }
+      label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #24282e; }
+      input { width: 100%; padding: 13px 14px; border: 1.5px solid #c2c8d1; border-radius: 6px; font-size: 16px; background-color: #fbfcfd; color: #141414; transition: all 0.2s ease; }
+      input:focus { outline: none; border-color: var(--cor-destaque); box-shadow: 0 0 0 3px rgba(179, 139, 77, 0.18); }
+      .btn-gold { width: 100%; padding: 16px; background-color: var(--cor-principal); color: var(--cor-texto-botao); border: 1.5px solid var(--cor-destaque); border-radius: 8px; font-size: 16px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: all 0.25s ease; }
+      .btn-gold:hover { background-color: var(--cor-destaque); color: #ffffff; }
+      .btn-gold:disabled { background: #8c939d; border-color: #8c939d; color: #fff; cursor: not-allowed; }
+      #erroBox { display: none; background-color: #fdecea; color: #b71c1c; border: 1px solid #e57373; padding: 12px; border-radius: 6px; margin-top: 15px; text-align: center; font-size: 14px; }
+
+      /* PORTAL */
+      #telaPortal { display: none; }
+      .welcome-banner { text-align: center; margin-bottom: 35px; padding: 0 10px; }
+      .welcome-banner h2 { font-family: 'Cinzel', serif; font-size: 24px; color: var(--cor-texto-principal); margin: 0 0 12px; }
+      .welcome-banner h2::after { content: ''; display: block; width: 50px; height: 3px; background-color: var(--cor-destaque); margin: 14px auto 0; border-radius: 2px; }
+      .welcome-banner p { margin: 0 auto; max-width: 650px; color: #49505b; font-size: 15px; line-height: 1.6; text-align: justify; }
+
+      .section-divider { font-family: 'Cinzel', serif; font-size: 20px; color: var(--cor-texto-principal); font-weight: 700; border-bottom: 2px solid var(--cor-destaque); padding-bottom: 10px; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; }
+
+      /* CARTÕES DE SELEÇÃO DE ARQUIVOS */
+      .upload-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+      .upload-card { background: #fff; border: 1.5px dashed #b8bfca; border-radius: 8px; padding: 24px 20px 20px; text-align: center; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+      .upload-card.loaded { border: 2px solid var(--cor-destaque); background-color: #fcf9f2; }
+      .upload-card.success { border: 2px solid #2e7d32; background-color: #f1f8e9; }
+      .upload-card.missing-error { border: 2px solid #c62828; background-color: #fff5f5; }
+      .upload-card.highlight { border-color: var(--cor-destaque); background-color: #fcf9f2; }
+      
+      .badge-req { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-bottom: 10px; align-self: center; }
+      .badge-obrigatorio { background-color: #faf3e6; color: var(--cor-destaque-hover); border: 1px solid #e0c899; }
+      .badge-opcional { background-color: #f0f2f5; color: #656d78; border: 1px solid #d2d6dc; }
+
+      .upload-card h4 { margin: 0 0 6px; color: var(--cor-texto-principal); font-size: 16px; }
+      .upload-card p { margin: 0 0 18px; color: #666; font-size: 13px; line-height: 1.4; }
+      .upload-card input[type="file"] { display: none; }
+      .upload-btn { display: inline-block; background: #f4f6f9; border: 1px solid #c2c8d1; color: var(--cor-texto-principal); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+      .upload-btn:hover { border-color: var(--cor-destaque); color: var(--cor-destaque); }
+      
+      .status-text { margin-top: 14px; font-size: 13px; font-weight: 600; color: #8c939d; }
+      .loaded .status-text { color: var(--cor-destaque-hover); }
+      .success .status-text { color: #2e7d32; }
+      .missing-error .status-text { color: #c62828; }
+
+      .file-list { margin-top: 12px; text-align: left; font-size: 12px; color: #24282e; max-height: 120px; overflow-y: auto; padding: 0 4px; }
+      .file-item {
+        background: rgba(179, 139, 77, 0.12);
+        padding: 6px 8px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+      }
+      .file-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .btn-remove-file {
+        background: none;
+        border: none;
+        color: #b71c1c;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 13px;
+        padding: 0 4px;
+        flex-shrink: 0;
+      }
+
+      /* DECLARAÇÕES (ÁREA 1) */
+      .btn-gerar { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background-color: var(--cor-principal); color: var(--cor-texto-botao); padding: 14px; border-radius: 8px; border: 1px solid var(--cor-destaque); font-size: 14px; font-weight: 600; cursor: pointer; text-transform: uppercase; margin-bottom: 12px; transition: 0.2s; }
+      .btn-gerar:hover { background-color: var(--cor-destaque); color: #fff; }
+      .btn-gerar:disabled { background-color: #555; border-color: #555; color: #aaa; cursor: not-allowed; }
+
+      /* PAINEL DE ENVIO FINAL E BARRA DE PROGRESSO */
+      .submit-panel {
+        margin-top: 38px;
+        background: #ffffff;
+        border: 1px solid #cbd1da;
+        border-top: 3.5px solid var(--cor-destaque);
+        border-radius: 8px;
+        padding: 26px 24px;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      }
+      .submit-panel p {
+        margin: 0 0 18px;
+        font-size: 14px;
+        color: #49505b;
+        line-height: 1.5;
+      }
+      #alertaFaltantes {
+        display: none;
+        background-color: #fdecea;
+        color: #b71c1c;
+        border: 1.5px solid #e57373;
+        border-radius: 6px;
+        padding: 16px;
+        margin-bottom: 20px;
+        text-align: left;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      #alertaFaltantes ul { margin: 8px 0 0; padding-left: 20px; }
+
+      #boxProgresso {
+        display: none;
+        margin-top: 20px;
+        text-align: center;
+      }
+      .progress-track {
+        width: 100%;
+        height: 22px;
+        background-color: #e4e7ed;
+        border-radius: 11px;
+        overflow: hidden;
+        border: 1px solid #c2c8d1;
+        margin-bottom: 10px;
+      }
+      .progress-fill {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, var(--cor-destaque) 0%, var(--cor-texto-destaque) 100%);
+        transition: width 0.35s ease;
+      }
+      .progress-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--cor-texto-principal);
+      }
+
+      /* TELA DE SUCESSO FINAL */
+      #telaSucessoEnvio {
+        display: none;
+        text-align: center;
+        padding: 20px 10px;
+      }
+      .check-icon {
+        width: 74px;
+        height: 74px;
+        background-color: #faf5eb;
+        color: var(--cor-destaque);
+        border: 2px solid var(--cor-destaque);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        margin-bottom: 20px;
+      }
+      #telaSucessoEnvio h2 {
+        font-family: 'Cinzel', serif;
+        color: var(--cor-texto-principal);
+        font-size: 24px;
+        margin: 0 0 12px;
+      }
+      .info-card-sucesso {
+        background-color: #ffffff;
+        border: 1px solid #cbd1da;
+        border-left: 4px solid var(--cor-destaque);
+        border-radius: 8px;
+        padding: 24px;
+        margin: 22px auto 0;
+        max-width: 650px;
+        font-size: 15px;
+        color: #4a5058;
+        line-height: 1.7;
+        text-align: left;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      }
+
+      /* RODAPÉ */
+      .footer-bar { background-color: var(--cor-rodape); color: #5f6773; text-align: center; padding: 25px 20px; font-size: 12px; letter-spacing: 1.5px; border-top: 1px solid #c5cbd4; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+      .footer-brand { text-transform: uppercase; }
+      .footer-socials { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+      .footer-socials a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background-color: var(--cor-principal); color: var(--cor-texto-botao); border-radius: 50%; text-decoration: none; transition: all 0.3s ease; }
+      .footer-socials a:hover { background-color: var(--cor-destaque); color: #ffffff; transform: translateY(-3px); box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25); }
+      .footer-socials svg { width: 18px; height: 18px; fill: currentColor; }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper" id="mainWrapper" style="display: none;">
+      
+      <!-- CABEÇALHO DINÂMICO -->
+      <div class="header" id="headerBox">
+        <img id="logoImg" class="logo-img" alt="Logo" style="display: none;">
+        <h1 class="logo-text" id="logoText" style="display: none;"></h1>
+        <p class="logo-subtext" id="logoSubtext" style="display: none;"></p>
+      </div>
+
+      <!-- TELA DE PORTAL DESATIVADO / MANUTENÇÃO -->
+      <div class="maintenance-box" id="telaManutencao">
+        <div class="maintenance-icon">⏳</div>
+        <h2>Portal Temporariamente Indisponível</h2>
+        <p>Este ambiente digital está passando por manutenção programada no momento. Em caso de urgência ou necessidade de atendimento imediato, entre em contato diretamente com nossa equipe pelo WhatsApp.</p>
+        <a id="btnWaManutencao" href="#" target="_blank" class="btn-wa-manutencao" style="display: none;">FALAR PELO WHATSAPP</a>
+      </div>
+
+      <div class="content-body" id="areaConteudo">
+        
+        <div id="telaLogin">
+          <h2>Acesso Restrito</h2>
+          <form onsubmit="fazerLogin(event)">
+            <div class="form-group">
+              <label>Seu CPF</label>
+              <input type="text" id="loginCpf" required maxlength="14" placeholder="000.000.000-00">
+            </div>
+            <div class="form-group">
+              <label>Código de Acesso (6 dígitos)</label>
+              <input type="password" id="loginSenha" required maxlength="6" placeholder="******">
+            </div>
+            <button type="submit" id="btnEntrar" class="btn-gold">ACESSAR PORTAL</button>
+            <div id="erroBox"></div>
+          </form>
+        </div>
+
+        <div id="telaPortal">
+          
+          <div class="welcome-banner">
+            <h2><span id="saudacaoTempo">Olá</span>, Sr.(a) <span id="nomeCliente"></span>!</h2>
+            <p>Seja bem-vindo(a) à sua área segura de gestão de documentos. Este ambiente é exclusivo para que você baixe suas declarações e envie sua documentação com total praticidade, sigilo profissional e proteção de dados (LGPD) diretamente para nossa equipe jurídica.</p>
+          </div>
+
+          <!-- ÁREA 1: GERAÇÃO DE DOCUMENTOS -->
+          <div class="section-divider">
+            <span style="color: var(--cor-destaque);">1.</span> Geração de Documentos
+          </div>
+          <div id="area-declaracoes" style="text-align: center; margin-bottom: 40px;">
+            <p style="margin: 0 auto 25px; max-width: 650px; color: #49505b; font-size: 15px; line-height: 1.6; text-align: justify;">
+              Selecione os botões abaixo para emitir a documentação jurídica personalizada para o seu caso. Recomendamos que a assinatura seja feita <strong>preferencialmente via Gov.br</strong> ou certificado digital. Se optar pela impressão e assinatura manual, digitalize o documento ou tire uma foto nítida e anexe no respectivo campo abaixo.
+            </p>
+            <div id="grid-botoes-declaracao" style="max-width: 450px; margin: 0 auto;"></div>
+          </div>
+
+          <!-- ÁREA 2: CARREGAMENTO E ENVIO DE DOCUMENTOS -->
+          <div class="section-divider">
+            <span style="color: var(--cor-destaque);">2.</span> Envio de Documentos e Provas
+          </div>
+          
+          <div class="upload-grid" id="grid-documentos"></div>
+
+          <!-- PAINEL DE ENVIO FINAL COM TRAVA E BARRA DE PROGRESSO -->
+          <div class="submit-panel" id="painelEnvioFinal">
+            <p>
+              Após carregar todos os documentos obrigatórios nos cartões acima, clique no botão abaixo para concluir o envio ao escritório.
+            </p>
+
+            <div id="alertaFaltantes"></div>
+
+            <button type="button" id="btnEnviarTudo" class="btn-gold" onclick="iniciarEnvioEmLote()">
+              ENVIAR TODOS OS DOCUMENTOS
+            </button>
+
+            <div id="boxProgresso">
+              <div class="progress-track">
+                <div class="progress-fill" id="barraProgresso"></div>
+              </div>
+              <div class="progress-label" id="textoProgresso">Preparando envio... 0%</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TELA DE CONFIRMAÇÃO APÓS 100% -->
+        <div id="telaSucessoEnvio">
+          <div class="check-icon">✓</div>
+          <h2>Documentos Enviados com Sucesso!</h2>
+          <p style="font-size: 16px; color: #49505b; margin-top: 0;">
+            Obrigado, <strong id="nomeSucesso"></strong>! Toda a sua documentação foi recebida e organizada com segurança.
+          </p>
+          <div class="info-card-sucesso">
+            <strong style="color: var(--cor-destaque-hover);">1. Confirmação por E-mail:</strong> Enviamos um comprovante detalhado dos documentos recebidos para <strong id="emailSucesso" style="color: var(--cor-destaque-hover);"></strong>.<br><br>
+            <strong style="color: var(--cor-destaque-hover);">2. Próximo Passo:</strong> Nossa equipe jurídica já foi notificada e iniciará a análise da sua pasta.<br><br>
+            <span id="resumoArquivosSucesso" style="font-size: 13.5px; color: #49505b;"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RODAPÉ COM CANAIS DINÂMICOS -->
+      <div class="footer-bar">
+        <div class="footer-brand" id="footerBrand">PORTAL DO CLIENTE</div>
+        <div class="footer-socials" id="footerSocials"></div>
+      </div>
+    </div>
+
+    <!-- LOADER INICIAL -->
+    <div id="telaCarregando">
+      <div class="spinner"></div>
+      <p style="font-family: 'Cinzel', serif; font-size: 16px; color: #121418; letter-spacing: 1px;">Carregando Portal do Cliente...</p>
+    </div>
+
+    <script>
+      var API_URL = 'https://script.google.com/macros/s/AKfycbymrfb2oCCuLhV7EPJ8hqy7nvfb6asUsjYYcPPpegeqYP_sbpB44lx7rGBf8FAvd38z/exec';
+      var urlParams = new URLSearchParams(window.location.search);
+      var perfilAtual = urlParams.get('p') || urlParams.get('perfil') || urlParams.get('advogado') || 'Alisson A. Oliveira';
+
+      var cpfLogado = "";
+      var nomeLogado = "";
+      var primeiroNomeLogado = "";
+      var registroCartoes = {};
+      var envioEmAndamento = false;
+
+      function chamarApiPost(payload) {
+        return fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        }).then(function(res) { return res.json(); });
+      }
+
+      function aplicarTemaDinamico(cfg) {
+        if (!cfg) return;
+        perfilAtual = cfg.perfil || perfilAtual;
+
+        var root = document.documentElement;
+        root.style.setProperty('--cor-principal', cfg.corPrincipal);
+        root.style.setProperty('--cor-texto-principal', cfg.corTextoPrincipal || cfg.corPrincipal);
+        root.style.setProperty('--cor-texto-botao', cfg.corTextoBotao || cfg.corTextoDestaque);
+        root.style.setProperty('--cor-destaque', cfg.corDestaque);
+        root.style.setProperty('--cor-destaque-hover', cfg.corDestaqueHover);
+        root.style.setProperty('--cor-texto-destaque', cfg.corTextoDestaque);
+        root.style.setProperty('--cor-fundo', cfg.corFundo);
+        root.style.setProperty('--cor-container', cfg.corContainer);
+        root.style.setProperty('--cor-rodape', cfg.corRodape);
+
+        if (cfg.googleFontsUrl) {
+          document.getElementById('dynamicFonts').href = cfg.googleFontsUrl;
+        }
+
+        if (cfg.nomeTexto) {
+          document.title = 'Portal do Cliente - ' + cfg.nomeTexto;
+        }
+
+        var headerBox = document.getElementById('headerBox');
+        if (cfg.cabecalhoClaro) {
+          headerBox.style.background = cfg.fundoCabecalho;
+        } else {
+          headerBox.style.background = 'radial-gradient(circle at 50% 38%, #3c424d 0%, #1d2026 55%, ' + cfg.fundoCabecalho + ' 100%)';
+        }
+
+        var logoImg = document.getElementById('logoImg');
+        var apenasLogo = (!cfg.nomeHtml && !cfg.fraseHtml);
+        if (cfg.logoBase64) {
+          logoImg.src = cfg.logoBase64;
+          logoImg.style.display = 'inline-block';
+          logoImg.style.maxWidth = apenasLogo ? '260px' : '120px';
+          logoImg.style.marginBottom = apenasLogo ? '0' : '20px';
+        } else if (cfg.logoId) {
+          logoImg.src = 'https://drive.google.com/thumbnail?id=' + cfg.logoId + '&sz=w600';
+          logoImg.style.display = 'inline-block';
+          logoImg.style.maxWidth = apenasLogo ? '260px' : '120px';
+          logoImg.style.marginBottom = apenasLogo ? '0' : '20px';
+        }
+
+        if (cfg.nomeHtml) {
+          var logoText = document.getElementById('logoText');
+          logoText.innerHTML = cfg.nomeHtml;
+          logoText.style.display = 'block';
+        }
+        if (cfg.fraseHtml) {
+          var logoSubtext = document.getElementById('logoSubtext');
+          logoSubtext.innerHTML = cfg.fraseHtml;
+          logoSubtext.style.display = 'block';
+        }
+
+        var footerBrand = document.getElementById('footerBrand');
+        footerBrand.innerText = cfg.nomeTexto
+          ? cfg.nomeTexto + (cfg.fraseTexto ? ' • ' + cfg.fraseTexto : '')
+          : 'PORTAL DO CLIENTE';
+
+        var socialsHtml = '';
+        if (cfg.whatsapp) {
+          socialsHtml += '<a href="https://wa.me/' + cfg.whatsapp + '" target="_blank" title="Fale pelo WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>';
+        }
+        if (cfg.instagram) {
+          socialsHtml += '<a href="' + cfg.instagram + '" target="_blank" title="Siga no Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>';
+        }
+        if (cfg.facebook) {
+          socialsHtml += '<a href="' + cfg.facebook + '" target="_blank" title="Curta no Facebook"><svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a>';
+        }
+        if (cfg.linkedin) {
+          socialsHtml += '<a href="' + cfg.linkedin + '" target="_blank" title="Conecte-se no LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>';
+        }
+        if (cfg.emailContato) {
+          socialsHtml += '<a href="mailto:' + cfg.emailContato + '" title="Envie um E-mail"><svg viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg></a>';
+        }
+        document.getElementById('footerSocials').innerHTML = socialsHtml;
+
+        if (!cfg.ativo) {
+          document.getElementById('areaConteudo').style.display = 'none';
+          document.getElementById('telaManutencao').style.display = 'block';
+          if (cfg.whatsapp) {
+            var btnWa = document.getElementById('btnWaManutencao');
+            btnWa.href = 'https://wa.me/' + cfg.whatsapp;
+            btnWa.style.display = 'inline-block';
+          }
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', function() {
+        fetch(API_URL + '?acao=config&p=' + encodeURIComponent(perfilAtual))
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.sucesso && data.cfg) {
+              aplicarTemaDinamico(data.cfg);
+            }
+            document.getElementById('telaCarregando').style.display = 'none';
+            document.getElementById('mainWrapper').style.display = 'block';
+          })
+          .catch(function() {
+            document.getElementById('telaCarregando').style.display = 'none';
+            document.getElementById('mainWrapper').style.display = 'block';
+          });
+      });
+
+      var inputLoginCpfEl = document.getElementById('loginCpf');
+      if (inputLoginCpfEl) {
+        inputLoginCpfEl.addEventListener('input', function(e) {
+          var v = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})/);
+          e.target.value = !v[2] ? v[1] : v[1] + '.' + v[2] + (v[3] ? '.' + v[3] : '') + (v[4] ? '-' + v[4] : '');
+        });
+      }
+
+      function fazerLogin(e) {
+        e.preventDefault();
+        var cpf = document.getElementById('loginCpf').value;
+        var senha = document.getElementById('loginSenha').value;
+        var btn = document.getElementById('btnEntrar');
+        var erro = document.getElementById('erroBox');
+        
+        btn.disabled = true;
+        btn.innerText = "VERIFICANDO...";
+        erro.style.display = 'none';
+
+        chamarApiPost({ acao: 'validarLogin', cpf: cpf, senha: senha, perfilAtual: perfilAtual })
+          .then(function(res) {
+            if (res.sucesso) {
+              var hora = new Date().getHours();
+              var textoSaudacao = "Boa noite";
+              if (hora >= 5 && hora < 12) { textoSaudacao = "Bom dia"; } 
+              else if (hora >= 12 && hora < 18) { textoSaudacao = "Boa tarde"; }
+              document.getElementById('saudacaoTempo').innerText = textoSaudacao;
+              
+              cpfLogado = String(cpf).replace(/\D/g, '');
+              nomeLogado = res.nomeCompleto;
+              primeiroNomeLogado = res.nome;
+              document.getElementById('nomeCliente').innerText = res.nome;
+              
+              desenharCartoes(res.perfil);
+
+              document.getElementById('telaLogin').style.display = 'none';
+              document.getElementById('telaPortal').style.display = 'block';
+            } else {
+              btn.disabled = false;
+              btn.innerText = "ACESSAR PORTAL";
+              erro.innerText = res.mensagem;
+              erro.style.display = 'block';
+            }
+          })
+          .catch(function(err) {
+            btn.disabled = false;
+            btn.innerText = "ACESSAR PORTAL";
+            erro.innerText = "Erro de conexão com o servidor: " + err.message;
+            erro.style.display = 'block';
+          });
+      }
+
+      function desenharCartoes(perfil) {
+        var gridDocumentos = document.getElementById('grid-documentos');
+        var gridBotoes = document.getElementById('grid-botoes-declaracao');
+        gridDocumentos.innerHTML = '';
+        gridBotoes.innerHTML = '';
+        registroCartoes = {};
+
+        function addCard(id, titulo, subtitulo, obrigatorio = true, multiplo = false, ehDestaque = false) {
+          registroCartoes[id] = {
+            id: id,
+            titulo: titulo,
+            obrigatorio: obrigatorio,
+            multiplo: multiplo,
+            arquivos: []
+          };
+
+          var classeDestaque = ehDestaque ? ' highlight' : '';
+          var badgeHtml = obrigatorio ? '<span class="badge-req badge-obrigatorio">Obrigatório</span>' : '<span class="badge-req badge-opcional">Opcional</span>';
+          var attrMultiple = multiplo ? 'multiple' : '';
+          var textoBotao = multiplo ? 'Selecionar Arquivo(s)' : 'Selecionar Arquivo';
+
+          var cardHtml = `
+            <div class="upload-card${classeDestaque}" id="card-${id}">
+              <div>${badgeHtml}<h4>${titulo}</h4><p>${subtitulo}</p></div>
+              <div>
+                <label class="upload-btn">
+                  ${textoBotao}
+                  <input type="file" ${attrMultiple} onchange="carregarNaFila(this, '${id}')">
+                </label>
+                <div class="status-text" id="status-card-${id}">Aguardando arquivo...</div>
+                <div class="file-list" id="list-card-${id}"></div>
+              </div>
+            </div>`;
+          gridDocumentos.innerHTML += cardHtml;
+        }
+
+        function addDeclaracao(id, titulo, codigoId) {
+          var btnHtml = `<button id="btn-dec-${codigoId}" class="btn-gerar" onclick="gerarDeclaracao('${codigoId}', 'btn-dec-${codigoId}')">📄 GERAR ${titulo}</button>`;
+          gridBotoes.innerHTML += btnHtml;
+        }
+
+        // DOCUMENTOS FIXOS
+        addDeclaracao('procuracao', 'PROCURAÇÃO AD JUDICIA', 'Procuracao');
+        addCard('proc-assinada', 'Procuração Assinada', 'Anexe o documento gerado acima devidamente assinado', true, false, true);
+
+        addDeclaracao('hipossuficiencia', 'DECLARAÇÃO DE HIPOSSUFICIÊNCIA', 'Hipossuficiencia');
+        addCard('hipo-assinada', 'Declaração de Hipossuficiência', 'Anexe o documento gerado acima devidamente assinado', true, false, true);
+
+        addCard('rg', 'RG ou CNH', 'Frente e verso legível (ou versão digital)', true, false);
+        addCard('endereco', 'Comprovante de Endereço', 'Conta de água, luz ou internet mais recente', true, false);
+        addCard('registrato', 'Relatório do Registrato', 'Documento(s) do Banco Central (Meu BC)', true, true);
+        addCard('extratos', 'Extratos Bancários', 'Últimos 3 meses (Conta Corrente e Poupança)', true, true);
+        addCard('provas', 'Provas do Caso', 'Contratos, prints, fotos ou recibos relacionados', false, true);
+
+        // REGRA DE TRABALHO
+        if (perfil.trabalho === 'CLT') {
+          addCard('holerites', '3 Últimos Holerites', 'Contracheques recentes', true, true);
+        } else if (perfil.trabalho === 'Aposentado') {
+          addDeclaracao('dec-aposentadoria', 'DECLARAÇÃO DE APOSENTADORIA', 'Aposentadoria');
+          addCard('dec-aposentadoria-upload', 'Declaração de Aposentadoria', 'Anexe o PDF assinado', true, false);
+          addCard('inss', 'Extrato do INSS', 'Comprovante do benefício', true, false);
+        } else if (perfil.trabalho === 'Autônomo') {
+          addDeclaracao('dec-autonomo', 'DECLARAÇÃO DE ATIVIDADE E RENDA', 'AtividadeAutonoma');
+          addCard('dec-autonomo-upload', 'Declaração de Atividade Assinada', 'Anexe o PDF assinado', true, false);
+        } else if (perfil.trabalho === 'Afastado') {
+          addDeclaracao('dec-afastamento', 'DECLARAÇÃO DE AFASTAMENTO LABORAL', 'AfastamentoLaboral');
+          addCard('dec-afast-upload', 'Declaração de Afastamento Assinada', 'Anexe o PDF assinado', true, false);
+          addCard('comprovante-afastamento', 'Atestado ou Extrato INSS', 'Opcional, se houver', false, false);
+        } else if (perfil.trabalho === 'Benefício Social') {
+          addDeclaracao('dec-beneficio', 'DECLARAÇÃO DE BENEFÍCIO SOCIAL', 'BeneficioSocial');
+          addCard('dec-beneficio-upload', 'Declaração de Benefício Assinada', 'Anexe o PDF assinado', true, false);
+        } else if (perfil.trabalho === 'Sem Renda Fixa') {
+          addDeclaracao('dec-semvinculo', 'DECLARAÇÃO DE AUSÊNCIA DE VÍNCULO', 'AusenciaVinculo');
+          addCard('dec-semvinculo-upload', 'Declaração de Ausência de Vínculo', 'Anexe o PDF assinado', true, false);
+        }
+
+        // REGRA DE IMPOSTO DE RENDA
+        if (perfil.ir === 'Declarante') {
+          addCard('dirpf', 'Imposto de Renda (DIRPF)', 'Declaração Completa + Recibo', true, false);
+        } else {
+          addCard('certidao-ir', 'Certidão de Regularidade (IR)', 'Emitida no site da Receita', true, false);
+        }
+
+        // REGRA PATRIMONIAL (BENS)
+        if (perfil.patrimonio === 'Apenas Imóveis' || perfil.patrimonio === 'Ambos') {
+          addCard('matricula', 'Matrícula ou Contrato de Imóvel', 'Documentação dos imóveis', true, true);
+        }
+        if (perfil.patrimonio === 'Apenas Veículos' || perfil.patrimonio === 'Ambos') {
+          addCard('crlv', 'Documento do Veículo (CRLV)', 'CRLV de cada veículo', true, true);
+        }
+
+        if (perfil.patrimonio === 'Nenhum') {
+          addDeclaracao('dec-bens-imoveis', 'DECLARAÇÃO INEXISTÊNCIA IMÓVEIS', 'InexistenciaImoveis');
+          addCard('up-inexist-imoveis', 'Inexistência de Imóveis', 'Anexe o PDF assinado', true, false);
+          addDeclaracao('dec-bens-veiculos', 'DECLARAÇÃO INEXISTÊNCIA VEÍCULOS', 'InexistenciaVeiculos');
+          addCard('up-inexist-veiculos', 'Inexistência de Veículos', 'Anexe o PDF assinado', true, false);
+        } else if (perfil.patrimonio === 'Apenas Imóveis') {
+          addDeclaracao('dec-bens-veiculos', 'DECLARAÇÃO INEXISTÊNCIA VEÍCULOS', 'InexistenciaVeiculos');
+          addCard('up-inexist-veiculos', 'Inexistência de Veículos', 'Anexe o PDF assinado', true, false);
+        } else if (perfil.patrimonio === 'Apenas Veículos') {
+          addDeclaracao('dec-bens-imoveis', 'DECLARAÇÃO INEXISTÊNCIA IMÓVEIS', 'InexistenciaImoveis');
+          addCard('up-inexist-imoveis', 'Inexistência de Imóveis', 'Anexe o PDF assinado', true, false);
+        }
+
+        // REGRA DO CÔNJUGE
+        if (perfil.estadoCivil.indexOf('casado') !== -1 || perfil.estadoCivil.indexOf('estável') !== -1) {
+          addCard('casamento', 'Certidão de Casamento', 'Atualizada (ou documento de União Estável)', false, false);
+          addCard('rg-conjuge', 'RG ou CNH do Cônjuge', 'Frente e verso legível', true, false, true);
+          addCard('registrato-conjuge', 'Relatório do Registrato do Cônjuge', 'Documento(s) do Banco Central (Meu BC)', false, true, true);
+          addCard('extrato-conjuge', 'Extratos Bancários do Cônjuge', 'Últimos 3 meses', false, true, true);
+        }
+      }
+
+      function carregarNaFila(inputElement, idCartao) {
+        if (envioEmAndamento) return;
+
+        var arquivosSelecionados = Array.from(inputElement.files);
+        if (arquivosSelecionados.length === 0) return;
+
+        var infoCartao = registroCartoes[idCartao];
+        if (!infoCartao) return;
+
+        if (!infoCartao.multiplo) {
+          infoCartao.arquivos = [arquivosSelecionados[0]];
+        } else {
+          for (var i = 0; i < arquivosSelecionados.length; i++) {
+            infoCartao.arquivos.push(arquivosSelecionados[i]);
+          }
+        }
+
+        inputElement.value = "";
+        atualizarVisualCartao(idCartao);
+        document.getElementById('alertaFaltantes').style.display = 'none';
+      }
+
+      function removerArquivoDaFila(idCartao, indiceArquivo) {
+        if (envioEmAndamento) return;
+        var infoCartao = registroCartoes[idCartao];
+        if (!infoCartao) return;
+
+        infoCartao.arquivos.splice(indiceArquivo, 1);
+        atualizarVisualCartao(idCartao);
+      }
+
+      function atualizarVisualCartao(idCartao) {
+        var infoCartao = registroCartoes[idCartao];
+        var cardEl = document.getElementById('card-' + idCartao);
+        var statusEl = document.getElementById('status-card-' + idCartao);
+        var listEl = document.getElementById('list-card-' + idCartao);
+
+        cardEl.classList.remove('missing-error', 'loaded', 'success');
+        listEl.innerHTML = '';
+
+        if (infoCartao.arquivos.length === 0) {
+          statusEl.innerText = "Aguardando arquivo...";
+          return;
+        }
+
+        cardEl.classList.add('loaded');
+        statusEl.innerText = "✓ Carregado (aguardando envio final)";
+
+        for (var i = 0; i < infoCartao.arquivos.length; i++) {
+          var item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML =
+            '<span title="' + infoCartao.arquivos[i].name + '">📄 ' + infoCartao.arquivos[i].name + '</span>' +
+            '<button type="button" class="btn-remove-file" title="Remover arquivo" onclick="removerArquivoDaFila(\'' + idCartao + '\', ' + i + ')">✕</button>';
+          listEl.appendChild(item);
+        }
+      }
+
+      function iniciarEnvioEmLote() {
+        if (envioEmAndamento) return;
+
+        var faltantes = [];
+        var filaCompleta = [];
+
+        for (var idCartao in registroCartoes) {
+          if (Object.prototype.hasOwnProperty.call(registroCartoes, idCartao)) {
+            var info = registroCartoes[idCartao];
+            var cardEl = document.getElementById('card-' + idCartao);
+
+            if (info.obrigatorio && info.arquivos.length === 0) {
+              faltantes.push(info.titulo);
+              cardEl.classList.add('missing-error');
+              document.getElementById('status-card-' + idCartao).innerText = "⚠ Documento obrigatório pendente";
+            } else {
+              cardEl.classList.remove('missing-error');
+              for (var j = 0; j < info.arquivos.length; j++) {
+                filaCompleta.push({
+                  idCartao: idCartao,
+                  tipoDoc: info.titulo,
+                  arquivo: info.arquivos[j]
+                });
+              }
+            }
+          }
+        }
+
+        var alertaEl = document.getElementById('alertaFaltantes');
+
+        if (faltantes.length > 0) {
+          var listaHtml = '<strong>Atenção:</strong> Antes de enviar, anexe os seguintes documentos obrigatórios que ainda estão faltando:<ul>';
+          for (var f = 0; f < faltantes.length; f++) {
+            listaHtml += '<li>' + faltantes[f] + '</li>';
+          }
+          listaHtml += '</ul>';
+          alertaEl.innerHTML = listaHtml;
+          alertaEl.style.display = 'block';
+          return;
+        }
+
+        if (filaCompleta.length === 0) {
+          alertaEl.innerHTML = '<strong>Atenção:</strong> Selecione pelo menos um documento antes de enviar.';
+          alertaEl.style.display = 'block';
+          return;
+        }
+
+        alertaEl.style.display = 'none';
+        envioEmAndamento = true;
+
+        var btnEnviar = document.getElementById('btnEnviarTudo');
+        btnEnviar.disabled = true;
+        btnEnviar.innerText = "ENVIANDO DOCUMENTOS...";
+
+        var boxProgresso = document.getElementById('boxProgresso');
+        var barra = document.getElementById('barraProgresso');
+        var textoProg = document.getElementById('textoProgresso');
+        boxProgresso.style.display = 'block';
+        barra.style.width = '0%';
+        textoProg.innerText = 'Iniciando transferência segura... 0%';
+
+        var total = filaCompleta.length;
+        var indiceAtual = 0;
+        var arquivosSalvosNomes = [];
+
+        function enviarProximoDaFila() {
+          if (indiceAtual >= total) {
+            barra.style.width = '100%';
+            textoProg.innerText = '100% — Finalizando e enviando confirmações por e-mail...';
+
+            chamarApiPost({
+              acao: 'finalizarEnvioDocumentos',
+              cpf: cpfLogado,
+              listaArquivosEnviados: arquivosSalvosNomes,
+              perfilAtual: perfilAtual
+            })
+              .then(function(resFinal) {
+                envioEmAndamento = false;
+                exibirTelaConclusao(resFinal, arquivosSalvosNomes);
+              })
+              .catch(function() {
+                envioEmAndamento = false;
+                exibirTelaConclusao({ sucesso: false, emailCliente: '' }, arquivosSalvosNomes);
+              });
+            return;
+          }
+
+          var itemFila = filaCompleta[indiceAtual];
+          var pctAtual = Math.round((indiceAtual / total) * 100);
+          barra.style.width = pctAtual + '%';
+          textoProg.innerText = 'Enviando ' + (indiceAtual + 1) + ' de ' + total + ' (' + itemFila.tipoDoc + ') — ' + pctAtual + '%';
+
+          var cardEl = document.getElementById('card-' + itemFila.idCartao);
+          var statusEl = document.getElementById('status-card-' + itemFila.idCartao);
+          statusEl.style.color = 'var(--cor-destaque-hover)';
+          statusEl.innerText = 'Enviando para o escritório...';
+
+          var leitor = new FileReader();
+          leitor.onload = function(e) {
+            var payload = {
+              perfilAtual: perfilAtual,
+              bytes: e.target.result.split(',')[1],
+              mimeType: itemFila.arquivo.type,
+              nomeOriginal: itemFila.arquivo.name,
+              tipoDoc: itemFila.tipoDoc,
+              cpf: cpfLogado,
+              nomeCompleto: nomeLogado
+            };
+
+            chamarApiPost({ acao: 'salvarDocumento', dados: payload })
+              .then(function(res) {
+                if (res.sucesso) {
+                  cardEl.classList.remove('loaded');
+                  cardEl.classList.add('success');
+                  statusEl.style.color = '#2e7d32';
+                  statusEl.innerText = res.identificadoPorId
+                    ? "✓ Identificado e salvo como: " + res.documentoIdentificado
+                    : "✓ Enviado com sucesso";
+
+                  arquivosSalvosNomes.push(res.nomeSalvo || itemFila.tipoDoc);
+
+                  indiceAtual++;
+                  var pctConcluido = Math.round((indiceAtual / total) * 100);
+                  barra.style.width = pctConcluido + '%';
+                  textoProg.innerText = 'Progresso do envio: ' + pctConcluido + '%';
+
+                  enviarProximoDaFila();
+                } else {
+                  envioEmAndamento = false;
+                  btnEnviar.disabled = false;
+                  btnEnviar.innerText = "TENTAR NOVAMENTE";
+                  statusEl.style.color = '#b71c1c';
+                  statusEl.innerText = "Erro: " + res.mensagem;
+                  textoProg.innerText = "Envio interrompido no arquivo: " + itemFila.arquivo.name;
+                }
+              })
+              .catch(function() {
+                envioEmAndamento = false;
+                btnEnviar.disabled = false;
+                btnEnviar.innerText = "TENTAR NOVAMENTE";
+                statusEl.style.color = '#b71c1c';
+                statusEl.innerText = "Falha de conexão.";
+                textoProg.innerText = "Falha de conexão com o servidor. Clique em Tentar Novamente.";
+              });
+          };
+          leitor.readAsDataURL(itemFila.arquivo);
+        }
+
+        enviarProximoDaFila();
+      }
+
+      function exibirTelaConclusao(resFinal, listaNomes) {
+        document.getElementById('telaPortal').style.display = 'none';
+        document.getElementById('telaSucessoEnvio').style.display = 'block';
+
+        document.getElementById('nomeSucesso').innerText = primeiroNomeLogado;
+        document.getElementById('emailSucesso').innerText = (resFinal && resFinal.emailCliente) ? resFinal.emailCliente : 'seu e-mail cadastrado';
+
+        var htmlResumo = '<strong>Documentos enviados (' + listaNomes.length + '):</strong><ul style="margin: 8px 0 0; padding-left: 20px;">';
+        for (var i = 0; i < listaNomes.length; i++) {
+          htmlResumo += '<li>' + listaNomes[i] + '</li>';
+        }
+        htmlResumo += '</ul>';
+        document.getElementById('resumoArquivosSucesso').innerHTML = htmlResumo;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function gerarDeclaracao(codigoDoc, btnId) {
+        var btn = document.getElementById(btnId);
+        var textoOriginal = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = "⏳ GERANDO PDF...";
+
+        chamarApiPost({
+          acao: 'gerarPDFDeclaracao',
+          codigoDoc: codigoDoc,
+          cpf: cpfLogado,
+          perfilAtual: perfilAtual
+        })
+          .then(function(res) {
+            btn.disabled = false;
+            btn.innerText = textoOriginal;
+            
+            if (res.sucesso) {
+              var link = document.createElement('a');
+              link.href = 'data:application/pdf;base64,' + res.base64;
+              link.download = res.nomeArquivo;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            } else {
+              alert("Erro ao gerar documento: " + res.mensagem);
+            }
+          })
+          .catch(function() {
+            btn.disabled = false;
+            btn.innerText = textoOriginal;
+            alert("Falha ao comunicar com o servidor.");
+          });
+      }
+    </script>
+  </body>
+</html>

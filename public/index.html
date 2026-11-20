@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha Cadastral do Cliente</title>
+    <link id="dynamicFonts" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --cor-principal: #121418;
+        --cor-texto-principal: #121418;
+        --cor-texto-botao: #d4af6a;
+        --cor-destaque: #b38b4d;
+        --cor-destaque-hover: #8c6b32;
+        --cor-texto-destaque: #c8933b;
+        --cor-fundo: #cfd4dd;
+        --cor-container: #e4e7ed;
+        --cor-rodape: #d8dce4;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--cor-fundo);
+        min-height: 100vh;
+        margin: 0;
+        padding: 30px 12px 50px;
+        color: #1c1e21;
+        transition: background-color 0.25s ease;
+      }
+      .wrapper {
+        max-width: 700px;
+        margin: 0 auto;
+        background-color: var(--cor-container);
+        border-radius: 12px;
+        border: 1px solid #b8bfca;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
+        overflow: hidden;
+      }
+
+      /* TELA DE CARREGAMENTO INICIAL */
+      #telaCarregando {
+        padding: 80px 30px;
+        text-align: center;
+      }
+      .spinner {
+        width: 46px;
+        height: 46px;
+        border: 4px solid rgba(179, 139, 77, 0.25);
+        border-top-color: var(--cor-destaque);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        margin: 0 auto 18px;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* CABEÇALHO DINÂMICO */
+      .header {
+        background: radial-gradient(circle at 50% 38%, #3c424d 0%, #1d2026 55%, #111317 100%);
+        padding: 40px 25px 35px;
+        text-align: center;
+        border-bottom: 3px solid var(--cor-destaque);
+      }
+      .logo-img {
+        max-width: 130px; 
+        width: 100%;
+        height: auto;
+        display: inline-block;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
+      }
+      .logo-text {
+        font-family: 'Cinzel', serif;
+        font-size: 26px;
+        font-weight: 500;
+        margin: 0;
+        letter-spacing: 2px;
+      }
+      .logo-subtext {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 11px;
+        margin: 8px 0 0;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+      }
+
+      /* TELA DE MANUTENÇÃO */
+      .maintenance-box {
+        display: none;
+        padding: 55px 30px;
+        text-align: center;
+      }
+      .maintenance-icon {
+        width: 74px;
+        height: 74px;
+        background-color: #faf5eb;
+        color: var(--cor-destaque);
+        border: 2px solid var(--cor-destaque);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+      .maintenance-box h2 {
+        font-family: 'Cinzel', serif;
+        color: var(--cor-texto-principal);
+        font-size: 22px;
+        margin: 0 0 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .maintenance-box p {
+        max-width: 500px;
+        margin: 0 auto 24px;
+        font-size: 15px;
+        color: #49505b;
+        line-height: 1.65;
+      }
+      .btn-wa-manutencao {
+        display: inline-block;
+        background-color: var(--cor-principal);
+        color: var(--cor-texto-botao);
+        border: 1.5px solid var(--cor-destaque);
+        padding: 14px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        transition: all 0.25s ease;
+      }
+      .btn-wa-manutencao:hover {
+        background-color: var(--cor-destaque);
+        color: #ffffff;
+      }
+
+      /* ÁREA DE APRESENTAÇÃO */
+      .intro {
+        background-color: transparent;
+        padding: 35px 30px 20px;
+        text-align: center;
+      }
+      .intro h2 {
+        font-family: 'Cinzel', serif;
+        margin: 0 0 12px;
+        font-size: 24px;
+        color: var(--cor-texto-principal);
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+      .intro h2::after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background-color: var(--cor-destaque);
+        margin: 14px auto 0;
+        border-radius: 2px;
+      }
+      .intro p {
+        margin: 0 auto;
+        max-width: 580px;
+        font-size: 15px;
+        color: #49505b;
+        line-height: 1.6;
+        text-align: justify;
+      }
+
+      .form-body { padding: 10px 24px 32px; }
+
+      /* CARTÕES BRANCOS */
+      .section-card {
+        background-color: #ffffff;
+        border: 1px solid #cbd1da;
+        border-top: 3.5px solid var(--cor-destaque); 
+        border-radius: 8px;
+        padding: 24px 24px 12px;
+        margin-bottom: 22px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid #e6e9ef;
+        padding-bottom: 12px;
+        margin-bottom: 18px;
+      }
+      .section-badge {
+        background-color: var(--cor-principal);
+        color: var(--cor-texto-botao);
+        font-size: 13px;
+        font-weight: 700;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .section-title {
+        font-size: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: var(--cor-texto-principal);
+        margin: 0;
+      }
+
+      .row { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; }
+      .col { flex: 1; min-width: 210px; position: relative; }
+      .col-small { flex: 0 0 135px; }
+      label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #24282e; }
+      label span.req { color: var(--cor-destaque); font-weight: 700; }
+      
+      input, select {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1.5px solid #c2c8d1;
+        border-radius: 6px;
+        font-size: 16px;
+        background-color: #fbfcfd;
+        color: #141414;
+        transition: all 0.2s ease;
+      }
+      input::placeholder { color: #8a929e; }
+      input:focus, select:focus {
+        outline: none;
+        background-color: #ffffff;
+        border-color: var(--cor-destaque);
+        box-shadow: 0 0 0 3px rgba(179, 139, 77, 0.18);
+      }
+      input:read-only {
+        background-color: #eef1f5;
+        color: #555;
+        cursor: not-allowed;
+      }
+
+      /* BANNER DE CADASTRO EXISTENTE */
+      #boxCadastroExistente {
+        display: none;
+        background-color: #fcf9f2;
+        border: 1.5px solid var(--cor-destaque);
+        border-radius: 8px;
+        padding: 18px;
+        margin-bottom: 20px;
+        animation: fadeIn 0.3s ease;
+      }
+      #boxCadastroExistente h4 { margin: 0 0 8px; color: var(--cor-texto-principal); font-size: 15px; }
+      #boxCadastroExistente p { margin: 0 0 14px; font-size: 13.5px; color: #49505b; line-height: 1.5; }
+      .auth-inline { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+      .auth-inline input { max-width: 160px; padding: 10px 12px; font-size: 15px; letter-spacing: 2px; text-align: center; }
+      .btn-auth {
+        background-color: var(--cor-principal); color: var(--cor-texto-botao); border: 1px solid var(--cor-destaque);
+        padding: 11px 18px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s;
+      }
+      .btn-auth:hover { background-color: var(--cor-destaque); color: #fff; }
+      .link-reenviar {
+        display: inline-block; margin-top: 10px; font-size: 12.5px; color: var(--cor-destaque-hover);
+        text-decoration: underline; cursor: pointer; font-weight: 600;
+      }
+      #avisoModoEdicao {
+        display: none; background-color: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7;
+        padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; font-weight: 600; text-align: center;
+      }
+
+      /* CAIXAS DINÂMICAS */
+      .dynamic-subbox {
+        display: none;
+        background-color: #fcf9f2;
+        border-left: 3.5px solid var(--cor-destaque);
+        padding: 16px 16px 2px;
+        border-radius: 6px;
+        margin-bottom: 18px;
+        animation: fadeIn 0.3s ease;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Seletor Customizado (Nacionalidade) */
+      .custom-select-trigger {
+        width: 100%; padding: 13px 14px; border: 1.5px solid #c2c8d1; border-radius: 6px;
+        font-size: 16px; background-color: #fbfcfd; color: #141414; cursor: pointer;
+        display: flex; justify-content: space-between; align-items: center;
+      }
+      .custom-select-trigger:hover { border-color: var(--cor-destaque); }
+      .custom-select-dropdown {
+        display: none; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff;
+        border: 1.5px solid var(--cor-destaque); border-radius: 6px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        z-index: 100; margin-top: 4px; overflow: hidden;
+      }
+      .custom-options-list { max-height: 200px; overflow-y: auto; }
+      .custom-option { padding: 11px 14px; font-size: 15px; cursor: pointer; border-bottom: 1px solid #f0f2f5; color: #222; }
+      .custom-option:hover, .custom-option.selected { background-color: #faf5eb; color: var(--cor-destaque-hover); font-weight: 600; }
+      .custom-search-box { padding: 10px; background-color: #f1f3f6; border-top: 1px solid #dcdfe4; }
+      .custom-search-box input { padding: 9px 12px; font-size: 14px; background-color: #ffffff; }
+
+      .cep-hint { font-size: 13px; color: #555e6b; margin-top: 5px; }
+      .btn-submit {
+        width: 100%; padding: 17px; background-color: var(--cor-principal);
+        color: var(--cor-texto-botao); border: 1.5px solid var(--cor-destaque); border-radius: 8px; font-size: 16px;
+        font-weight: 700; letter-spacing: 1px; cursor: pointer; margin-top: 8px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); transition: all 0.25s ease;
+      }
+      .btn-submit:hover {
+        background-color: var(--cor-destaque);
+        color: #ffffff; box-shadow: 0 8px 25px rgba(179, 139, 77, 0.3);
+      }
+      .btn-submit:disabled { background: #9aa0a6; border-color: #9aa0a6; color: #ffffff; cursor: not-allowed; box-shadow: none; }
+      #erroBox {
+        display: none; background-color: #fdecea; color: #b71c1c; border: 1.5px solid #e57373;
+        padding: 14px 16px; border-radius: 6px; margin-top: 16px; font-size: 15px; font-weight: 600; text-align: center;
+      }
+
+      #telaSucesso { display: none; background-color: var(--cor-container); padding: 50px 30px; text-align: center; }
+      .check-icon {
+        width: 74px; height: 74px; background-color: #faf5eb; color: var(--cor-destaque);
+        border: 2px solid var(--cor-destaque); border-radius: 50%; display: inline-flex;
+        align-items: center; justify-content: center; font-size: 34px; margin-bottom: 20px;
+      }
+      #telaSucesso h2 { font-family: 'Cinzel', serif; color: var(--cor-texto-principal); font-size: 24px; margin-bottom: 10px; }
+      .info-card {
+        background-color: #ffffff; border: 1px solid #cbd1da; border-left: 4px solid var(--cor-destaque);
+        border-radius: 8px; padding: 24px; margin: 25px 0 0; font-size: 15px;
+        color: #4a5058; line-height: 1.7; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      }
+
+      /* RODAPÉ */
+      .footer-bar {
+        background-color: var(--cor-rodape); color: #5f6773; text-align: center; padding: 25px 20px;
+        font-size: 12px; letter-spacing: 1.5px; border-top: 1px solid #c5cbd4;
+        display: flex; flex-direction: column; align-items: center; gap: 15px;
+      }
+      .footer-brand { text-transform: uppercase; }
+      .footer-socials { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+      .footer-socials a {
+        display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+        background-color: var(--cor-principal); color: var(--cor-texto-botao); border-radius: 50%; text-decoration: none; transition: all 0.3s ease;
+      }
+      .footer-socials a:hover { background-color: var(--cor-destaque); color: #ffffff; transform: translateY(-3px); box-shadow: 0 5px 12px rgba(200, 147, 59, 0.4); }
+      .footer-socials svg { width: 18px; height: 18px; fill: currentColor; }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper" id="mainWrapper" style="display: none;">
+      
+      <!-- CABEÇALHO DINÂMICO -->
+      <div class="header" id="headerBox">
+        <img id="logoImg" class="logo-img" alt="Logo" style="display: none;">
+        <h1 class="logo-text" id="logoText" style="display: none;"></h1>
+        <p class="logo-subtext" id="logoSubtext" style="display: none;"></p>
+      </div>
+
+      <!-- TELA DE PORTAL DESATIVADO / MANUTENÇÃO -->
+      <div class="maintenance-box" id="telaManutencao">
+        <div class="maintenance-icon">⏳</div>
+        <h2>Portal Temporariamente Indisponível</h2>
+        <p>Este ambiente digital está passando por manutenção programada no momento. Em caso de urgência ou necessidade de atendimento imediato, entre em contato diretamente com nossa equipe pelo WhatsApp.</p>
+        <a id="btnWaManutencao" href="#" target="_blank" class="btn-wa-manutencao" style="display: none;">FALAR PELO WHATSAPP</a>
+      </div>
+
+      <!-- FORMULÁRIO DE CADASTRO -->
+      <div id="areaFormulario">
+        <div class="intro">
+          <h2>Ficha Cadastral do Cliente</h2>
+          <p>Seja bem-vindo(a) ao nosso Portal de Cadastro, seu ambiente digital exclusivo. Preencha os dados abaixo com calma e atenção, pois eles serão a base de todos os documentos jurídicos do seu atendimento. Suas informações estão protegidas pelo rigoroso sigilo profissional e pela LGPD.</p>
+        </div>
+
+        <form id="formCadastro" class="form-body" onsubmit="enviarFormulario(event)">
+          
+          <div id="avisoModoEdicao">
+            ✓ Modo de Atualização Cadastral Ativo — Edite os campos desejados e salve abaixo.
+          </div>
+
+          <!-- SEÇÃO 1: QUALIFICAÇÃO -->
+          <div class="section-card">
+            <div class="section-header">
+              <span class="section-badge">1</span>
+              <h3 class="section-title">Qualificação Pessoal</h3>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>CPF <span class="req">*</span></label>
+                <input type="text" id="cpf" required maxlength="14" placeholder="000.000.000-00" onblur="checarCpfExistente()">
+                <div id="statusCpf" class="cep-hint"></div>
+              </div>
+              <div class="col">
+                <label>RG (apenas números e dígito) <span class="req">*</span></label>
+                <input type="text" id="rg" required maxlength="12" placeholder="Ex: 377983512">
+              </div>
+            </div>
+
+            <!-- BANNER DE AUTENTICAÇÃO PARA CADASTRO EXISTENTE -->
+            <div id="boxCadastroExistente">
+              <h4>Identificamos que você já possui cadastro!</h4>
+              <p>Para sua segurança (LGPD), informe o <strong>Código de Acesso de 6 dígitos</strong> enviado para o e-mail <strong id="emailMascaradoBox"></strong> para carregar seus dados e atualizá-los:</p>
+              <div class="auth-inline">
+                <input type="password" id="inputSenhaEdicao" maxlength="6" placeholder="******">
+                <button type="button" class="btn-auth" id="btnCarregarDados" onclick="autenticarECarregar()">CARREGAR MEUS DADOS</button>
+              </div>
+              <div id="msgAuthBox" style="font-size: 13px; margin-top: 8px; font-weight: 600;"></div>
+              <span class="link-reenviar" onclick="solicitarReenvioSenha()">Esqueci meu código (Reenviar para o e-mail)</span>
+            </div>
+            
+            <div class="row">
+              <div class="col">
+                <label>Nome Completo (sem abreviações) <span class="req">*</span></label>
+                <input type="text" id="nomeCompleto" required placeholder="Ex: Maria da Silva Oliveira">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col" id="campoNacionalidadeWrapper">
+                <label>Nacionalidade <span class="req">*</span></label>
+                <input type="hidden" id="nacionalidade" value="brasileiro (a)">
+                <div class="custom-select-trigger" onclick="toggleDropdownNacionalidade()">
+                  <span id="nacionalidadeLabel">Brasileiro(a)</span>
+                  <span style="font-size: 12px; color: #555;">▼</span>
+                </div>
+                <div class="custom-select-dropdown" id="dropdownNacionalidade">
+                  <div class="custom-options-list" id="listaNacionalidades"></div>
+                  <div class="custom-search-box">
+                    <input type="text" id="buscaNacionalidade" placeholder="Pesquisar país ou nacionalidade..." oninput="filtrarNacionalidades()">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col">
+                <label>Estado Civil <span class="req">*</span></label>
+                <select id="estadoCivil" required onchange="verificarConjuge()">
+                  <option value="">Selecione...</option>
+                  <option value="solteiro (a)">Solteiro(a)</option>
+                  <option value="casado (a)">Casado(a)</option>
+                  <option value="divorciado (a)">Divorciado(a)</option>
+                  <option value="viúvo (a)">Viúvo(a)</option>
+                  <option value="união estável">União Estável</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- CAMPOS DINÂMICOS DO CÔNJUGE -->
+            <div id="blocoConjuge" class="dynamic-subbox">
+              <div class="row">
+                <div class="col">
+                  <label>Profissão / Ocupação do Cônjuge <span class="req">*</span></label>
+                  <input type="text" id="profissaoConjuge" placeholder="Ex: Vendedor(a), Do lar, Motorista...">
+                </div>
+                <div class="col">
+                  <label>Regime / Trabalho do Cônjuge <span class="req">*</span></label>
+                  <select id="situacaoTrabalhoConjuge">
+                    <option value="">Selecione...</option>
+                    <option value="CLT">Carteira Assinada (CLT)</option>
+                    <option value="PJ">Pessoa Jurídica (PJ)</option>
+                    <option value="Autônomo">Autônomo(a) / Profissional Liberal</option>
+                    <option value="Aposentado">Aposentado(a) ou Pensionista</option>
+                    <option value="Sem Renda Fixa">Sem renda fixa no momento</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profissão e Situação de Trabalho do Titular -->
+            <div class="row">
+              <div class="col">
+                <label>Sua Profissão / Ocupação <span class="req">*</span></label>
+                <input type="text" id="profissao" required placeholder="Ex: Auxiliar Administrativo, Feirante, etc.">
+              </div>
+              <div class="col">
+                <label>Seu Regime / Situação de Trabalho <span class="req">*</span></label>
+                <select id="situacaoTrabalho" required onchange="verificarDetalheTrabalho()">
+                  <option value="">Selecione...</option>
+                  <option value="CLT">Carteira Assinada (CLT)</option>
+                  <option value="PJ">Pessoa Jurídica (PJ)</option>
+                  <option value="Autônomo">Autônomo(a) / Profissional Liberal</option>
+                  <option value="Afastado">Afastado(a) por Motivo Médico ou Acidente</option>
+                  <option value="Benefício Social">Beneficiário(a) de Programa Social</option>
+                  <option value="Aposentado">Aposentado(a) ou Pensionista</option>
+                  <option value="Sem Renda Fixa">Sem vínculo empregatício / Sem renda fixa</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- CAMPO DINÂMICO PARA DETALHES DE TRABALHO -->
+            <div id="blocoDetalheTrabalho" class="dynamic-subbox">
+              <div class="row">
+                <div class="col">
+                  <label id="labelDetalheTrabalho">Detalhe <span class="req">*</span></label>
+                  <input type="text" id="detalheTrabalho" placeholder="">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SEÇÃO 2 -->
+          <div class="section-card">
+            <div class="section-header">
+              <span class="section-badge">2</span>
+              <h3 class="section-title">Contatos</h3>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>Telefone / WhatsApp (com DDD) <span class="req">*</span></label>
+                <input type="text" id="telefone" required maxlength="15" placeholder="(11) 99999-9999">
+              </div>
+              <div class="col">
+                <label>E-mail Principal <span class="req">*</span></label>
+                <input type="email" id="email" required placeholder="seuemail@exemplo.com">
+              </div>
+            </div>
+          </div>
+
+          <!-- SEÇÃO 3 -->
+          <div class="section-card">
+            <div class="section-header">
+              <span class="section-badge">3</span>
+              <h3 class="section-title">Endereço Residencial</h3>
+            </div>
+
+            <div class="row">
+              <div class="col" style="max-width: 240px;">
+                <label>CEP <span class="req">*</span></label>
+                <input type="text" id="cep" required maxlength="9" placeholder="00000-000" onblur="buscarCEP()">
+                <div id="statusCep" class="cep-hint">Digite o CEP para preencher o endereço</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>Rua / Avenida (Logradouro) <span class="req">*</span></label>
+                <input type="text" id="logradouro" required>
+              </div>
+              <div class="col-small">
+                <label>Número <span class="req">*</span></label>
+                <input type="text" id="numero" required placeholder="Ex: 120">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>Complemento</label>
+                <input type="text" id="complemento" placeholder="Ex: Apto 42, Bloco B...">
+              </div>
+              <div class="col">
+                <label>Bairro <span class="req">*</span></label>
+                <input type="text" id="bairro" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>Cidade / Município <span class="req">*</span></label>
+                <input type="text" id="cidade" required>
+              </div>
+              <div class="col-small">
+                <label>Estado (UF) <span class="req">*</span></label>
+                <input type="text" id="uf" required maxlength="2" placeholder="SP" style="text-transform: uppercase;">
+              </div>
+            </div>
+          </div>
+
+          <!-- SEÇÃO 4: PERFIL PATRIMONIAL -->
+          <div class="section-card">
+            <div class="section-header">
+              <span class="section-badge">4</span>
+              <h3 class="section-title">Perfil Financeiro e Patrimonial</h3>
+            </div>
+            
+            <div class="row">
+              <div class="col">
+                <label>Você declara Imposto de Renda? <span class="req">*</span></label>
+                <select id="impostoRenda" required>
+                  <option value="">Selecione...</option>
+                  <option value="Declarante">Sim, declaro anualmente</option>
+                  <option value="Isento">Não, sou isento(a)</option>
+                  <option value="Nunca Declarou">Não, nunca declarei</option>
+                </select>
+              </div>
+              <div class="col">
+                <label>Possui bens registrados em seu nome? <span class="req">*</span></label>
+                <select id="patrimonio" required>
+                  <option value="">Selecione...</option>
+                  <option value="Apenas Imóveis">Apenas Imóveis (casas, lotes, etc.)</option>
+                  <option value="Apenas Veículos">Apenas Veículos (carros, motos, etc.)</option>
+                  <option value="Ambos">Ambos (Imóveis e Veículos)</option>
+                  <option value="Nenhum">Nenhum bem registrado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSalvar" class="btn-submit">CONCLUIR MEU CADASTRO</button>
+          <div id="erroBox"></div>
+        </form>
+      </div>
+
+      <!-- TELA DE CONFIRMAÇÃO -->
+      <div id="telaSucesso">
+        <div class="check-icon">✓</div>
+        <h2 id="tituloSucesso">Cadastro Concluído!</h2>
+        <p id="msgBoasVindas" style="font-size: 16px; color: #49505b; margin-top: 0;"></p>
+        <div class="info-card" id="cardInfoSucesso">
+          Acabamos de enviar um e-mail para <strong id="emailConfirmado" style="color: var(--cor-destaque-hover);"></strong> contendo:<br><br>
+          <strong style="color: var(--cor-destaque-hover);">1.</strong> A confirmação do seu cadastro;<br>
+          <strong style="color: var(--cor-destaque-hover);">2.</strong> O link do <strong>Portal do Cliente</strong>;<br>
+          <strong style="color: var(--cor-destaque-hover);">3.</strong> Sua <strong>Senha Exclusiva de 6 dígitos</strong> para o envio futuro dos seus documentos.<br><br>
+          <em style="font-size: 13px; color: #5f6773;">(Caso não encontre na caixa de entrada, verifique sua pasta de Spam ou Lixo Eletrônico).</em>
+        </div>
+      </div>
+
+      <!-- RODAPÉ COM CONTATOS DINÂMICOS -->
+      <div class="footer-bar">
+        <div class="footer-brand" id="footerBrand">PORTAL DO CLIENTE</div>
+        <div class="footer-socials" id="footerSocials"></div>
+      </div>
+    </div>
+
+    <!-- LOADER INICIAL -->
+    <div id="telaCarregando">
+      <div class="spinner"></div>
+      <p style="font-family: 'Cinzel', serif; font-size: 16px; color: #121418; letter-spacing: 1px;">Carregando ambiente seguro...</p>
+    </div>
+
+    <script>
+      var API_URL = 'https://script.google.com/macros/s/AKfycbxIyVr0ndYUT0JBmMtyv-NAUvXjJGKRNE8nSbs05srVqxuYChXpbIZ58SN1JKLMY5mKvw/exec';
+      var urlParams = new URLSearchParams(window.location.search);
+      var perfilAtual = urlParams.get('p') || urlParams.get('perfil') || urlParams.get('advogado') || 'Alisson A. Oliveira';
+
+      var emModoEdicao = false;
+      var senhaAutenticada = "";
+
+      function chamarApiPost(payload) {
+        return fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        }).then(function(res) { return res.json(); });
+      }
+
+      function aplicarTemaDinamico(cfg) {
+        if (!cfg) return;
+        perfilAtual = cfg.perfil || perfilAtual;
+
+        var root = document.documentElement;
+        root.style.setProperty('--cor-principal', cfg.corPrincipal);
+        root.style.setProperty('--cor-texto-principal', cfg.corTextoPrincipal || cfg.corPrincipal);
+        root.style.setProperty('--cor-texto-botao', cfg.corTextoBotao || cfg.corTextoDestaque);
+        root.style.setProperty('--cor-destaque', cfg.corDestaque);
+        root.style.setProperty('--cor-destaque-hover', cfg.corDestaqueHover);
+        root.style.setProperty('--cor-texto-destaque', cfg.corTextoDestaque);
+        root.style.setProperty('--cor-fundo', cfg.corFundo);
+        root.style.setProperty('--cor-container', cfg.corContainer);
+        root.style.setProperty('--cor-rodape', cfg.corRodape);
+
+        if (cfg.googleFontsUrl) {
+          document.getElementById('dynamicFonts').href = cfg.googleFontsUrl;
+        }
+
+        if (cfg.nomeTexto) {
+          document.title = 'Cadastro de Cliente - ' + cfg.nomeTexto;
+        }
+
+        var headerBox = document.getElementById('headerBox');
+        if (cfg.cabecalhoClaro) {
+          headerBox.style.background = cfg.fundoCabecalho;
+        } else {
+          headerBox.style.background = 'radial-gradient(circle at 50% 38%, #3c424d 0%, #1d2026 55%, ' + cfg.fundoCabecalho + ' 100%)';
+        }
+
+        var logoImg = document.getElementById('logoImg');
+        var apenasLogo = (!cfg.nomeHtml && !cfg.fraseHtml);
+        if (cfg.logoBase64) {
+          logoImg.src = cfg.logoBase64;
+          logoImg.style.display = 'inline-block';
+          logoImg.style.maxWidth = apenasLogo ? '260px' : '130px';
+          logoImg.style.marginBottom = apenasLogo ? '0' : '20px';
+        } else if (cfg.logoId) {
+          logoImg.src = 'https://drive.google.com/thumbnail?id=' + cfg.logoId + '&sz=w600';
+          logoImg.style.display = 'inline-block';
+          logoImg.style.maxWidth = apenasLogo ? '260px' : '130px';
+          logoImg.style.marginBottom = apenasLogo ? '0' : '20px';
+        }
+
+        if (cfg.nomeHtml) {
+          var logoText = document.getElementById('logoText');
+          logoText.innerHTML = cfg.nomeHtml;
+          logoText.style.display = 'block';
+        }
+        if (cfg.fraseHtml) {
+          var logoSubtext = document.getElementById('logoSubtext');
+          logoSubtext.innerHTML = cfg.fraseHtml;
+          logoSubtext.style.display = 'block';
+        }
+
+        var footerBrand = document.getElementById('footerBrand');
+        footerBrand.innerText = cfg.nomeTexto
+          ? cfg.nomeTexto + (cfg.fraseTexto ? ' • ' + cfg.fraseTexto : '')
+          : 'PORTAL DO CLIENTE';
+
+        var socialsHtml = '';
+        if (cfg.whatsapp) {
+          socialsHtml += '<a href="https://wa.me/' + cfg.whatsapp + '" target="_blank" title="Fale pelo WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>';
+        }
+        if (cfg.instagram) {
+          socialsHtml += '<a href="' + cfg.instagram + '" target="_blank" title="Siga no Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>';
+        }
+        if (cfg.facebook) {
+          socialsHtml += '<a href="' + cfg.facebook + '" target="_blank" title="Curta no Facebook"><svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a>';
+        }
+        if (cfg.linkedin) {
+          socialsHtml += '<a href="' + cfg.linkedin + '" target="_blank" title="Conecte-se no LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>';
+        }
+        if (cfg.emailContato) {
+          socialsHtml += '<a href="mailto:' + cfg.emailContato + '" title="Envie um E-mail"><svg viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg></a>';
+        }
+        document.getElementById('footerSocials').innerHTML = socialsHtml;
+
+        if (!cfg.ativo) {
+          document.getElementById('areaFormulario').style.display = 'none';
+          document.getElementById('telaManutencao').style.display = 'block';
+          if (cfg.whatsapp) {
+            var btnWa = document.getElementById('btnWaManutencao');
+            btnWa.href = 'https://wa.me/' + cfg.whatsapp;
+            btnWa.style.display = 'inline-block';
+          }
+        }
+      }
+
+      // Carrega configurações do perfil assim que a página abre
+      window.addEventListener('DOMContentLoaded', function() {
+        fetch(API_URL + '?acao=config&p=' + encodeURIComponent(perfilAtual))
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.sucesso && data.cfg) {
+              aplicarTemaDinamico(data.cfg);
+            }
+            document.getElementById('telaCarregando').style.display = 'none';
+            document.getElementById('mainWrapper').style.display = 'block';
+          })
+          .catch(function() {
+            document.getElementById('telaCarregando').style.display = 'none';
+            document.getElementById('mainWrapper').style.display = 'block';
+          });
+      });
+
+      var nacionalidades = [
+        { label: "Brasileiro(a) - Brasil", value: "brasileiro (a)" },
+        { label: "Alemão(ã) - Alemanha", value: "alemão (ã)" },
+        { label: "Americano(a) - Estados Unidos", value: "americano (a)" },
+        { label: "Angolano(a) - Angola", value: "angolano (a)" },
+        { label: "Argentino(a) - Argentina", value: "argentino (a)" },
+        { label: "Boliviano(a) - Bolívia", value: "boliviano (a)" },
+        { label: "Cabo-verdiano(a) - Cabo Verde", value: "cabo-verdiano (a)" },
+        { label: "Canadense - Canadá", value: "canadense" },
+        { label: "Chileno(a) - Chile", value: "chileno (a)" },
+        { label: "Chinês(a) - China", value: "chinês (a)" },
+        { label: "Colombiano(a) - Colômbia", value: "colombiano (a)" },
+        { label: "Coreano(a) - Coreia do Sul", value: "coreano (a)" },
+        { label: "Cubano(a) - Cuba", value: "cubano (a)" },
+        { label: "Equatoriano(a) - Equador", value: "equatoriano (a)" },
+        { label: "Espanhol(a) - Espanha", value: "espanhol (a)" },
+        { label: "Francês(a) - França", value: "francês (a)" },
+        { label: "Haitiano(a) - Haiti", value: "haitiano (a)" },
+        { label: "Inglês(a) / Britânico(a) - Reino Unido", value: "britânico (a)" },
+        { label: "Italiano(a) - Itália", value: "italiano (a)" },
+        { label: "Japonês(a) - Japão", value: "japonês (a)" },
+        { label: "Mexicano(a) - México", value: "mexicano (a)" },
+        { label: "Moçambicano(a) - Moçambique", value: "moçambicano (a)" },
+        { label: "Paraguaio(a) - Paraguai", value: "paraguaio (a)" },
+        { label: "Peruano(a) - Peru", value: "peruano (a)" },
+        { label: "Português(a) - Portugal", value: "português (a)" },
+        { label: "Sírio(a) - Síria", value: "sírio (a)" },
+        { label: "Suíço(a) - Suíça", value: "suíço (a)" },
+        { label: "Uruguaio(a) - Uruguai", value: "uruguaio (a)" },
+        { label: "Venezuelano(a) - Venezuela", value: "venezuelano (a)" },
+        { label: "Estrangeiro(a) - Outra Nacionalidade", value: "estrangeiro (a)" }
+      ];
+
+      function verificarDetalheTrabalho() {
+        var sit = document.getElementById('situacaoTrabalho').value;
+        var bloco = document.getElementById('blocoDetalheTrabalho');
+        var label = document.getElementById('labelDetalheTrabalho');
+        var input = document.getElementById('detalheTrabalho');
+
+        input.value = '';
+        input.oninput = null;
+
+        if (sit === 'Autônomo') {
+          bloco.style.display = 'block';
+          label.innerHTML = 'Qual a sua renda média mensal aproximada? (R$) <span class="req">*</span>';
+          input.placeholder = 'Ex: 1.500,00';
+          input.required = true;
+          input.oninput = function(e) {
+            var v = e.target.value.replace(/\D/g, '');
+            if (v === '') { e.target.value = ''; return; }
+            v = (parseInt(v, 10) / 100).toFixed(2) + '';
+            v = v.replace('.', ',');
+            v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            e.target.value = v;
+          };
+        } else if (sit === 'Afastado') {
+          bloco.style.display = 'block';
+          label.innerHTML = 'Qual o motivo do afastamento? <span class="req">*</span>';
+          input.placeholder = 'Ex: Acidente de trabalho, cirurgia no joelho, tratamento médico...';
+          input.required = true;
+        } else if (sit === 'Benefício Social') {
+          bloco.style.display = 'block';
+          label.innerHTML = 'Qual benefício governamental você recebe? <span class="req">*</span>';
+          input.placeholder = 'Ex: Bolsa Família, BPC/LOAS, Auxílio Gás...';
+          input.required = true;
+        } else {
+          bloco.style.display = 'none';
+          input.required = false;
+        }
+      }
+
+      function checarCpfExistente() {
+        if (emModoEdicao) return;
+        var cpf = document.getElementById('cpf').value;
+        var cpfLimpo = cpf.replace(/\D/g, '');
+        var statusCpf = document.getElementById('statusCpf');
+        var boxExistente = document.getElementById('boxCadastroExistente');
+
+        if (cpfLimpo.length !== 11) {
+          boxExistente.style.display = 'none';
+          statusCpf.innerText = '';
+          return;
+        }
+
+        statusCpf.innerText = 'Verificando CPF...';
+        statusCpf.style.color = '#555e6b';
+
+        chamarApiPost({ acao: 'verificarCpf', cpf: cpf })
+          .then(function(res) {
+            statusCpf.innerText = '';
+            if (res.existe) {
+              document.getElementById('emailMascaradoBox').innerText = res.emailMascarado;
+              boxExistente.style.display = 'block';
+              document.getElementById('btnSalvar').disabled = true;
+            } else {
+              boxExistente.style.display = 'none';
+              document.getElementById('btnSalvar').disabled = false;
+            }
+          })
+          .catch(function() {
+            statusCpf.innerText = '';
+          });
+      }
+
+      function autenticarECarregar() {
+        var cpf = document.getElementById('cpf').value;
+        var senha = document.getElementById('inputSenhaEdicao').value;
+        var btn = document.getElementById('btnCarregarDados');
+        var msg = document.getElementById('msgAuthBox');
+
+        if (senha.length < 6) {
+          msg.style.color = '#b71c1c';
+          msg.innerText = 'Digite os 6 dígitos do código de acesso.';
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = 'CARREGANDO...';
+        msg.innerText = '';
+
+        chamarApiPost({ acao: 'carregarDados', cpf: cpf, senha: senha, perfilAtual: perfilAtual })
+          .then(function(res) {
+            btn.disabled = false;
+            btn.innerText = 'CARREGAR MEUS DADOS';
+
+            if (res.sucesso) {
+              emModoEdicao = true;
+              senhaAutenticada = senha;
+              var d = res.dados;
+
+              document.getElementById('cpf').readOnly = true;
+              document.getElementById('boxCadastroExistente').style.display = 'none';
+              document.getElementById('avisoModoEdicao').style.display = 'block';
+
+              document.getElementById('nomeCompleto').value = d.nomeCompleto;
+              document.getElementById('rg').value = d.rg;
+              document.getElementById('estadoCivil').value = d.estadoCivil;
+              verificarConjuge();
+
+              document.getElementById('profissaoConjuge').value = d.profissaoConjuge;
+              document.getElementById('situacaoTrabalhoConjuge').value = d.situacaoTrabalhoConjuge;
+              document.getElementById('profissao').value = d.profissao;
+              
+              document.getElementById('situacaoTrabalho').value = d.situacaoTrabalho;
+              verificarDetalheTrabalho();
+              document.getElementById('detalheTrabalho').value = d.detalheTrabalho;
+
+              var telInput = document.getElementById('telefone');
+              telInput.value = d.telefone;
+              telInput.dispatchEvent(new Event('input'));
+
+              document.getElementById('email').value = d.email;
+
+              var cepInput = document.getElementById('cep');
+              cepInput.value = d.cep;
+              cepInput.dispatchEvent(new Event('input'));
+
+              document.getElementById('logradouro').value = d.logradouro;
+              document.getElementById('numero').value = d.numero;
+              document.getElementById('complemento').value = d.complemento;
+              document.getElementById('bairro').value = d.bairro;
+              document.getElementById('cidade').value = d.cidade;
+              document.getElementById('uf').value = d.uf;
+
+              document.getElementById('impostoRenda').value = d.impostoRenda;
+              document.getElementById('patrimonio').value = d.patrimonio;
+
+              document.getElementById('nacionalidade').value = d.nacionalidade;
+              var nacEncontrada = nacionalidades.find(function(n) { return n.value === d.nacionalidade; });
+              if (nacEncontrada) {
+                document.getElementById('nacionalidadeLabel').innerText = nacEncontrada.label.split(' - ')[0];
+              }
+
+              var btnSalvar = document.getElementById('btnSalvar');
+              btnSalvar.disabled = false;
+              btnSalvar.innerText = 'SALVAR ALTERAÇÕES DO CADASTRO';
+            } else {
+              msg.style.color = '#b71c1c';
+              msg.innerText = res.mensagem;
+            }
+          })
+          .catch(function(err) {
+            btn.disabled = false;
+            btn.innerText = 'CARREGAR MEUS DADOS';
+            msg.style.color = '#b71c1c';
+            msg.innerText = 'Erro de conexão: ' + err.message;
+          });
+      }
+
+      function solicitarReenvioSenha() {
+        var cpf = document.getElementById('cpf').value;
+        var msg = document.getElementById('msgAuthBox');
+        msg.style.color = 'var(--cor-destaque-hover)';
+        msg.innerText = 'Enviando código para o seu e-mail...';
+
+        chamarApiPost({ acao: 'reenviarSenha', cpf: cpf, perfilAtual: perfilAtual })
+          .then(function(res) {
+            msg.style.color = res.sucesso ? '#2e7d32' : '#b71c1c';
+            msg.innerText = res.mensagem;
+          })
+          .catch(function(err) {
+            msg.style.color = '#b71c1c';
+            msg.innerText = 'Erro ao enviar e-mail: ' + err.message;
+          });
+      }
+
+      function verificarConjuge() {
+        var ec = document.getElementById('estadoCivil').value;
+        var bloco = document.getElementById('blocoConjuge');
+        var profC = document.getElementById('profissaoConjuge');
+        var sitC = document.getElementById('situacaoTrabalhoConjuge');
+
+        if (ec === 'casado (a)' || ec === 'união estável') {
+          bloco.style.display = 'block';
+          profC.required = true;
+          sitC.required = true;
+        } else {
+          bloco.style.display = 'none';
+          profC.required = false;
+          sitC.required = false;
+          profC.value = '';
+          sitC.value = '';
+        }
+      }
+
+      function renderizarNacionalidades(filtro) {
+        var lista = document.getElementById('listaNacionalidades');
+        var valorAtual = document.getElementById('nacionalidade').value;
+        lista.innerHTML = '';
+        var termo = (filtro || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        nacionalidades.forEach(function(item) {
+          var textoNorm = item.label.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          if (textoNorm.indexOf(termo) !== -1) {
+            var div = document.createElement('div');
+            div.className = 'custom-option' + (item.value === valorAtual ? ' selected' : '');
+            div.innerText = item.label;
+            div.onclick = function() {
+              document.getElementById('nacionalidade').value = item.value;
+              document.getElementById('nacionalidadeLabel').innerText = item.label.split(' - ')[0];
+              document.getElementById('dropdownNacionalidade').style.display = 'none';
+            };
+            lista.appendChild(div);
+          }
+        });
+      }
+
+      function toggleDropdownNacionalidade() {
+        var dd = document.getElementById('dropdownNacionalidade');
+        if (dd.style.display === 'block') {
+          dd.style.display = 'none';
+        } else {
+          renderizarNacionalidades('');
+          dd.style.display = 'block';
+          var inputBusca = document.getElementById('buscaNacionalidade');
+          inputBusca.value = '';
+          setTimeout(function() { inputBusca.focus(); }, 50);
+        }
+      }
+
+      function filtrarNacionalidades() {
+        var termo = document.getElementById('buscaNacionalidade').value;
+        renderizarNacionalidades(termo);
+      }
+
+      document.addEventListener('click', function(e) {
+        var wrapper = document.getElementById('campoNacionalidadeWrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+          document.getElementById('dropdownNacionalidade').style.display = 'none';
+        }
+      });
+
+      document.getElementById('cpf').addEventListener('input', function(e) {
+        var v = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})/);
+        e.target.value = !v[2] ? v[1] : v[1] + '.' + v[2] + (v[3] ? '.' + v[3] : '') + (v[4] ? '-' + v[4] : '');
+      });
+
+      document.getElementById('rg').addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/[^0-9xX]/g, '').toUpperCase();
+      });
+
+      document.getElementById('cep').addEventListener('input', function(e) {
+        var v = e.target.value.replace(/\D/g, '').match(/(\d{0,5})(\d{0,3})/);
+        e.target.value = !v[2] ? v[1] : v[1] + '-' + v[2];
+      });
+
+      document.getElementById('telefone').addEventListener('input', function(e) {
+        var v = e.target.value.replace(/\D/g, '');
+        if (v.length > 10) {
+          v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+        } else if (v.length > 5) {
+          v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+        } else if (v.length > 2) {
+          v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+        }
+        e.target.value = v;
+      });
+
+      function validarEmail(email) {
+        var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!regex.test(email)) {
+          return { valido: false, msg: 'Digite um endereço de e-mail válido (ex: nome@provedor.com).' };
+        }
+        var errosComuns = ['@gmial.', '@gmal.', '@gamil.', '@hotmal.', '@hotnail.', '@outlok.', '@yaho.', '.con'];
+        var emailLower = email.toLowerCase();
+        for (var i = 0; i < errosComuns.length; i++) {
+          if (emailLower.indexOf(errosComuns[i]) !== -1) {
+            return { valido: false, msg: 'Verifique se há um erro de digitação no domínio do seu e-mail (' + email + ').' };
+          }
+        }
+        return { valido: true };
+      }
+
+      function buscarCEP() {
+        var cep = document.getElementById('cep').value.replace(/\D/g, '');
+        var status = document.getElementById('statusCep');
+        if (cep.length !== 8) return;
+
+        status.innerText = 'Buscando endereço...';
+        status.style.color = '#555e6b';
+        fetch('https://viacep.com.br/ws/' + cep + '/json/')
+          .then(function(res) { return res.json(); })
+          .then(function(dados) {
+            if (!dados.erro) {
+              document.getElementById('logradouro').value = dados.logradouro || '';
+              document.getElementById('bairro').value = dados.bairro || '';
+              document.getElementById('cidade').value = dados.localidade || '';
+              document.getElementById('uf').value = dados.uf || '';
+              status.innerText = 'Endereço localizado!';
+              status.style.color = '#2e7d32';
+              document.getElementById('numero').focus();
+            } else {
+              status.innerText = 'CEP não encontrado. Preencha manualmente.';
+              status.style.color = '#b71c1c';
+            }
+          })
+          .catch(function() {
+            status.innerText = 'Preencha o endereço manualmente.';
+            status.style.color = '#b71c1c';
+          });
+      }
+
+      function enviarFormulario(e) {
+        e.preventDefault();
+        var btn = document.getElementById('btnSalvar');
+        var erroBox = document.getElementById('erroBox');
+        erroBox.style.display = 'none';
+
+        var rgDigitado = document.getElementById('rg').value.replace(/[^0-9X]/gi, '');
+        if (rgDigitado.length < 7) {
+          erroBox.innerText = 'Por favor, informe um RG válido (mínimo de 7 caracteres).';
+          erroBox.style.display = 'block';
+          return;
+        }
+
+        var telLimpo = document.getElementById('telefone').value.replace(/\D/g, '');
+        if (telLimpo.length < 10) {
+          erroBox.innerText = 'Por favor, informe um telefone com DDD válido.';
+          erroBox.style.display = 'block';
+          return;
+        }
+
+        var emailDigitado = document.getElementById('email').value.trim();
+        var checkEmail = validarEmail(emailDigitado);
+        if (!checkEmail.valido) {
+          erroBox.innerText = checkEmail.msg;
+          erroBox.style.display = 'block';
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = emModoEdicao ? 'ATUALIZANDO DADOS...' : 'SALVANDO DADOS...';
+
+        var payload = {
+          perfilAtual: perfilAtual,
+          modoEdicao: emModoEdicao,
+          senhaEdicao: senhaAutenticada,
+          nomeCompleto: document.getElementById('nomeCompleto').value,
+          cpf: document.getElementById('cpf').value,
+          rg: document.getElementById('rg').value,
+          nacionalidade: document.getElementById('nacionalidade').value,
+          estadoCivil: document.getElementById('estadoCivil').value,
+          profissao: document.getElementById('profissao').value,
+          telefone: document.getElementById('telefone').value,
+          email: emailDigitado,
+          cep: document.getElementById('cep').value,
+          logradouro: document.getElementById('logradouro').value,
+          numero: document.getElementById('numero').value,
+          complemento: document.getElementById('complemento').value,
+          bairro: document.getElementById('bairro').value,
+          cidade: document.getElementById('cidade').value,
+          uf: document.getElementById('uf').value,
+          situacaoTrabalho: document.getElementById('situacaoTrabalho').value,
+          impostoRenda: document.getElementById('impostoRenda').value,
+          patrimonio: document.getElementById('patrimonio').value,
+          profissaoConjuge: document.getElementById('profissaoConjuge').value,
+          situacaoTrabalhoConjuge: document.getElementById('situacaoTrabalhoConjuge').value,
+          detalheTrabalho: document.getElementById('detalheTrabalho').value
+        };
+
+        chamarApiPost({ acao: 'registrarCliente', dados: payload })
+          .then(function(res) {
+            if (res.sucesso) {
+              document.getElementById('areaFormulario').style.display = 'none';
+              document.getElementById('telaSucesso').style.display = 'block';
+
+              if (res.atualizado) {
+                document.getElementById('tituloSucesso').innerText = 'Cadastro Atualizado!';
+                document.getElementById('msgBoasVindas').innerHTML = 'Pronto, <strong>' + res.nome + '</strong>! Suas informações foram atualizadas em nossa base.';
+                document.getElementById('cardInfoSucesso').innerHTML = 'Enviamos uma confirmação para o e-mail <strong style="color: var(--cor-destaque-hover);">' + res.email + '</strong>.<br><br>Seu código de acesso ao Portal do Cliente permanece exatamente o mesmo.';
+              } else {
+                document.getElementById('msgBoasVindas').innerHTML = 'Obrigado, <strong>' + res.nome + '</strong>! Seus dados já estão registrados.';
+                document.getElementById('emailConfirmado').innerText = res.email;
+              }
+            } else {
+              btn.disabled = false;
+              btn.innerText = emModoEdicao ? 'SALVAR ALTERAÇÕES DO CADASTRO' : 'CONCLUIR MEU CADASTRO';
+              erroBox.innerText = res.mensagem;
+              erroBox.style.display = 'block';
+            }
+          })
+          .catch(function(err) {
+            btn.disabled = false;
+            btn.innerText = emModoEdicao ? 'SALVAR ALTERAÇÕES DO CADASTRO' : 'CONCLUIR MEU CADASTRO';
+            erroBox.innerText = 'Erro de conexão: ' + err.message;
+            erroBox.style.display = 'block';
+          });
+      }
+    </script>
+  </body>
+</html>
