@@ -1181,5 +1181,16 @@
           });
       }
     </script>
-  </body>
+<script>
+  // Repassa o parâmetro de cor (ex: ?p=OAS) para o sistema do Google
+  window.addEventListener('DOMContentLoaded', function() {
+    var parametrosDaUrl = window.location.search;
+    if (parametrosDaUrl) {
+      var iframe = document.querySelector('iframe');
+      if (iframe && iframe.src.indexOf('?') === -1) {
+        iframe.src = iframe.src + parametrosDaUrl;
+      }
+    }
+  });
+</script>
 </html>
